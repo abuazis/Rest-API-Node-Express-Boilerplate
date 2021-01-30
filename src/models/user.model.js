@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const { roles } = require("../config/roles");
 const { toJSON, paginate } = require("./plugins");
 
+/// Define user collection schema
 const userSchema = mongoose.Schema(
   {
     name: {
@@ -34,19 +35,23 @@ const userSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+/// Call schema plugin
 userSchema.plugin(toJSON);
 userSchema.plugin(paginate);
 
+/// Check if user email has been registered
 userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
   const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
   return !!user;
 };
 
+/// Check if new password request is match with old password
 userSchema.methods.isPasswordMatch = async function (password) {
   const user = this;
   return bcrypt.compare(password, user.password);
 };
 
+/// Add pre method schema on save is called 
 userSchema.pre("save", async function (next) {
   const user = this;
   if (user.isModified("password")) {
@@ -55,6 +60,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+/// Register mongoose model for user schema
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

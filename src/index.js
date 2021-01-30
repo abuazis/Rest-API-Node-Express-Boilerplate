@@ -5,7 +5,7 @@ const logger = require("./config/logger");
 
 let server;
 
-// Setup configuration to connect with MongoDB
+/// Set mongoose configuration to connect with MongoDB
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   logger.info("Connected to MongoDB");
   server = app.listen(config.port, () => {
@@ -13,6 +13,7 @@ mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   });
 });
 
+/// Handle server listen state to print logger info
 const exitHandler = () => {
   if (server) {
     server.close(() => {
@@ -24,14 +25,17 @@ const exitHandler = () => {
   }
 };
 
+/// Handle error state to print logger error
 const unexpectedErrorHandler = (error) => {
   logger.error(error);
   exitHandler();
 };
 
+/// Call error handler to process the event
 process.on("uncaughtException", unexpectedErrorHandler);
 process.on("unhandledRejection", unexpectedErrorHandler);
 
+/// Call logger info to process 'SIGTERM' status
 process.on("SIGTERM", () => {
   logger.info("SIGTERM received");
   if (server) {

@@ -7,6 +7,7 @@ const { Token } = require("../models");
 const { tokenTypes } = require("../config/tokens");
 const ApiError = require("../utils/ApiError");
 
+/// Generate json web token and sign it based on parameter
 const generateToken = (userId, expires, type, secret = config.jwt.secret) => {
   const payload = {
     sub: userId,
@@ -17,6 +18,7 @@ const generateToken = (userId, expires, type, secret = config.jwt.secret) => {
   return jwt.sign(payload, secret);
 };
 
+/// Save generated json web token to mongodb and return it as document
 const saveToken = async (token, userId, expires, type, blacklisted = false) => {
   const tokenDoc = await Token.create({
     token,
@@ -28,6 +30,7 @@ const saveToken = async (token, userId, expires, type, blacklisted = false) => {
   return tokenDoc;
 };
 
+/// Verify existence json web token in mongodb 
 const verifyToken = async (token, type) => {
   const payload = jwt.verify(token, config.jwt.secret);
   const tokenDoc = await Token.findOne({
@@ -42,6 +45,7 @@ const verifyToken = async (token, type) => {
   return tokenDoc;
 };
 
+/// Generate refresh token for auth and access token for manage user
 const generateAuthTokens = async (user) => {
   const accessTokenExpires = moment().add(
     config.jwt.accessExpirationMinutes,
@@ -78,6 +82,7 @@ const generateAuthTokens = async (user) => {
   };
 };
 
+/// Generate token for reset user password account 
 const generateResetPasswordToken = async (email) => {
   const user = await userService.getUserByEmail(email);
   if (!user) {

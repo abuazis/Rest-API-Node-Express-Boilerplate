@@ -2,6 +2,7 @@
 const { version } = require('../../package.json');
 const config = require('../config/config');
 
+/// Define swagger config for documentation
 const swaggerDef = {
   openapi: '3.0.0',
   info: {

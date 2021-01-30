@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const { password, objectId } = require("./custom.validation");
 
+/// Create user validation request
 const createUser = {
   body: Joi.object().keys({
     name: Joi.string().required(),
@@ -10,6 +11,7 @@ const createUser = {
   }),
 };
 
+/// Get users validation request 
 const getUsers = {
   query: Joi.object().keys({
     name: Joi.string(),
@@ -20,12 +22,14 @@ const getUsers = {
   }),
 };
 
+/// Get user validation request
 const getUser = {
   params: Joi.object().keys({
     userId: Joi.string().custom(objectId),
   }),
 };
 
+/// Update user validation request 
 const updateUser = {
   params: Joi.object().keys({
     userId: Joi.required().custom(objectId),
@@ -37,6 +41,7 @@ const updateUser = {
   }).min(1),
 };
 
+/// Delete user validation request 
 const deleteUser = {
   params: Joi.object().keys({
     userId: Joi.string().custom(objectId),

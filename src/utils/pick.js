@@ -1,3 +1,4 @@
+/// Pick keys from existing object
 const pick = (object, keys) => {
   return keys.reduce((obj, key) => {
     if (object && Object.prototype.hasOwnProperty.call(object, key)) {

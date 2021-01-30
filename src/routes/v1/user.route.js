@@ -4,8 +4,10 @@ const validate = require("../../middlewares/validate");
 const userValidation = require("../../validations/user.validation");
 const userController = require("../../controllers/user.controller");
 
+/// Define express router
 const router = express.Router();
 
+/// Router post, get for get users, create users function
 router.route("/")
 .post(
   auth("manageUsers"),
@@ -18,6 +20,7 @@ router.route("/")
   userController.getUsers
 );
 
+/// Router get, pacth, delete for get user, update user, delete user function
 router.route("/:userId")
 .get(
   auth("getUsers"),

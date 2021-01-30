@@ -5,6 +5,7 @@ const ApiError = require("../utils/ApiError");
 const { Token } = require("../models");
 const { tokenTypes } = require("../config/tokens");
 
+/// Login user account with email and password
 const loginUserWithEmailAndPassword = async (email, password) => {
   const user = await userService.getUserByEmail(email);
   if (!user || !(await user.isPasswordMatch(password))) {
@@ -13,6 +14,7 @@ const loginUserWithEmailAndPassword = async (email, password) => {
   return user;
 };
 
+/// Push logging out user account 
 const logout = async (refreshToken) => {
   const refreshTokenDoc = await Token.findOne({
     token: refreshToken,
@@ -25,6 +27,7 @@ const logout = async (refreshToken) => {
   await refreshTokenDoc.remove();
 };
 
+/// Refresh authenticated user token refresh 
 const refreshAuth = async (refreshToken) => {
   try {
     const refreshTokenDoc = await tokenService.verifyToken(
@@ -42,6 +45,7 @@ const refreshAuth = async (refreshToken) => {
   }
 };
 
+/// Reset new user password account
 const resetPassword = async (resetPasswordToken, newPassword) => {
   try {
     const resetPasswordTokenDoc = await tokenService.verifyToken(

@@ -2,8 +2,10 @@ const dotenv = require("dotenv");
 const path = require("path");
 const Joi = require("joi");
 
+/// Set environment file (.env) path directory
 dotenv.config({ path: path.join(__dirname, "../../.env") });
 
+/// Define validation env value and describe each env key
 const envVarsSchema = Joi.object().keys({
   NODE_ENV: Joi.string().valid("production", "development", "test").required(),
   PORT: Joi.number().default(3000),
@@ -18,12 +20,15 @@ const envVarsSchema = Joi.object().keys({
   EMAIL_FROM: Joi.string().description("the from field in the emails sent by the app"),
 }).unknown();
 
+/// Define validation options, then validate on server enabled
 const { value: envVars, error } = envVarsSchema.prefs({ errors: { label: "key" } }).validate(process.env);
 
+/// Print log validation error, if error exists
 if (error) {
   throw new Error(`Config validation error: ${error.message}`);
 }
 
+/// Export configuration with environment object schema
 module.exports = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
